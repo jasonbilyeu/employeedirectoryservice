@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.IntegrationTest
 import org.springframework.boot.test.SpringApplicationContextLoader
-import org.springframework.http.HttpStatus
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.web.WebAppConfiguration
 import org.springframework.web.client.HttpClientErrorException
@@ -22,9 +21,10 @@ import static PageConstants.SEARCH
 import static PageConstants.SORT_COLUMN
 import static PageConstants.SORT_DIRECTION
 import static com.headspring.employeedirectory.db.EmployeeType.HR
-import static com.headspring.employeedirectory.db.EmployeeType.HR
 import static com.headspring.employeedirectory.db.EmployeeType.REGULAR
-import static org.springframework.data.domain.Sort.Direction.DESC;
+import static org.springframework.data.domain.Sort.Direction.DESC
+import static org.springframework.http.HttpStatus.FORBIDDEN
+import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
 @ContextConfiguration(loader = SpringApplicationContextLoader.class, classes = Application.class)
 @WebAppConfiguration
@@ -56,9 +56,11 @@ class EmployeeControllerSpec extends Specification {
 
         when:
         Employee insertedEmployee = employeeClient.create(aRandom.employee().build())
+        Employee storedEmployee = employeeRepository.findOne(insertedEmployee.id)
 
         then:
-        employeeRepository.findOne(insertedEmployee.id) == insertedEmployee
+        storedEmployee == insertedEmployee
+        storedEmployee.password == 'password'
     }
 
     def "should update employee when authenticated as HR employee" () {
@@ -92,7 +94,7 @@ class EmployeeControllerSpec extends Specification {
 
         then:
         def ex = thrown(HttpClientErrorException)
-        ex.statusCode == HttpStatus.FORBIDDEN
+        ex.statusCode == FORBIDDEN
     }
 
     def "should get forbidden when attempting to update employee as REGULAR employee" () {
@@ -106,7 +108,7 @@ class EmployeeControllerSpec extends Specification {
 
         then:
         def ex = thrown(HttpClientErrorException)
-        ex.statusCode == HttpStatus.FORBIDDEN
+        ex.statusCode == FORBIDDEN
     }
 
     def "should get forbidden when attempting to delete employee as REGULAR employee" () {
@@ -119,7 +121,43 @@ class EmployeeControllerSpec extends Specification {
 
         then:
         def ex = thrown(HttpClientErrorException)
-        ex.statusCode == HttpStatus.FORBIDDEN
+        ex.statusCode == FORBIDDEN
+    }
+
+    def "should get unauthorized when attempting to create employee when not authenticated" () {
+        given:
+        employeeClient = new EmployeeClient(hostname, port)
+
+        when:
+        employeeClient.create(aRandom.employee().build())
+
+        then:
+        def ex = thrown(HttpClientErrorException)
+        ex.statusCode == UNAUTHORIZED
+    }
+
+    def "should get unauthorized when attempting to update employee when not authenticated" () {
+        given:
+        employeeClient = new EmployeeClient(hostname, port)
+
+        when:
+        employeeClient.update(aRandom.employee().build())
+
+        then:
+        def ex = thrown(HttpClientErrorException)
+        ex.statusCode == UNAUTHORIZED
+    }
+
+    def "should get unauthorized when attempting to delete employee when not authenticated" () {
+        given:
+        employeeClient = new EmployeeClient(hostname, port)
+
+        when:
+        employeeClient.delete(aRandom.nextLong())
+
+        then:
+        def ex = thrown(HttpClientErrorException)
+        ex.statusCode == UNAUTHORIZED
     }
 
     def "should find one employee" () {
@@ -130,6 +168,18 @@ class EmployeeControllerSpec extends Specification {
         employeeClient.findOne(employee.id) == employee
     }
 
+    def "should get unauthorized when attempting to find one employee when not authenticated" () {
+        given:
+        employeeClient = new EmployeeClient(hostname, port)
+
+        when:
+        employeeClient.findOne(aRandom.nextLong())
+
+        then:
+        def ex = thrown(HttpClientErrorException)
+        ex.statusCode == UNAUTHORIZED
+    }
+
     def "should find many employees" () {
         given:
         Employee employee1 = employeeRepository.save(aRandom.employee().build())
@@ -137,6 +187,18 @@ class EmployeeControllerSpec extends Specification {
 
         expect:
         employeeClient.findMany().containsAll([employee1, employee2])
+    }
+
+    def "should get unauthorized when attempting to find many employees when not authenticated" () {
+        given:
+        employeeClient = new EmployeeClient(hostname, port)
+
+        when:
+        employeeClient.findMany()
+
+        then:
+        def ex = thrown(HttpClientErrorException)
+        ex.statusCode == UNAUTHORIZED
     }
 
     def "should find many employees specifying all paging and sorting params" () {

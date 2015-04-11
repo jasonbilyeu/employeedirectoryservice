@@ -26,7 +26,7 @@ public class EmployeeClient {
     private String password;
 
     public EmployeeClient(String hostname, int port) {
-        this.baseUri = URI.create(String.format("http://%s:%s", hostname, port));
+        baseUri = URI.create(String.format("http://%s:%s", hostname, port));
     }
 
     public EmployeeClient forEmployee(Employee employee) {

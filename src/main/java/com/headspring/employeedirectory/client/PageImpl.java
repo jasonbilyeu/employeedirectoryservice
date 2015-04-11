@@ -41,7 +41,7 @@ public class PageImpl<T> {
     @JsonProperty("numberOfElements")
     private int numberOfElements;
     @JsonIgnore
-    private Map<String, Object> additionalProperties = new HashMap<String, Object>();
+    private Map<String, Object> additionalProperties = new HashMap<>();
 
     /**
      * @return The totalElements

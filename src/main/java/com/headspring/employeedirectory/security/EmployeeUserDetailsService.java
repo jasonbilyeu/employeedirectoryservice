@@ -5,7 +5,6 @@ import com.headspring.employeedirectory.db.EmployeeRepository;
 import com.headspring.employeedirectory.db.EmployeeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.GrantedAuthorityImpl;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,6 +16,8 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
 
+// This class is temporary, because we are not using a real OAuth server
+// (with Active Directory or other system for PWD management)..
 @Service
 public class EmployeeUserDetailsService implements UserDetailsService {
 

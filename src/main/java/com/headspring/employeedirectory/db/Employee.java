@@ -11,7 +11,6 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -19,7 +18,7 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@EqualsAndHashCode(exclude = {"phoneNumbers", "employeeType", "password"})
+@EqualsAndHashCode(exclude = {"phoneNumbers", "password"})
 public class Employee {
     @Id
     @GeneratedValue
@@ -33,14 +32,19 @@ public class Employee {
     private String location;
 
     @Email
+    @NotNull
     private String email;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @NotEmpty
     private List<String> phoneNumbers;
 
+    @NotNull
     private EmployeeType employeeType;
 
+    // This is temporary, because we are not using a real OAuth server
+    // (with Active Directory or other system for PWD management) so password is stored here
+    // but not sent or received over the wire..
     @JsonIgnore
     private String password;
 }

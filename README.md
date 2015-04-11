@@ -21,7 +21,7 @@
 * * PUT (only available to ADMIN users) - http://localhost:8080/employees/id
 * * DELETE (only available to ADMIN users) - http://localhost:8080/employees/id
 
-* The GET call that returns many employees has some additional query parameters (to support paging, sorting, and searching/filtering):
+### The GET call that returns many employees has some additional query parameters (to support paging, sorting, and searching/filtering): ###
 
 * * GET page number 2 - http://locahost:8080/employees?pageNumber=2
 * * GET with pageSize of 25 records - http://localhost:8080/employees?pageSize=25

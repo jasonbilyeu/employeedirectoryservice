@@ -7,7 +7,8 @@
 
 * This repository is a sample service for administering and viewing an Employee Directory, complete with authentication, an Administrator (HR) role, and a Basic (Employee) role.
 * By default, the application runs on port 8080 and management port is 8081
-* This application exposes the following REST endpoints:
+
+### This application exposes the following REST endpoints: ###
 
 * *  GET - http://localhost:8080/employees
 * * POST - http://localhost:8080/employees
@@ -22,3 +23,11 @@
 * * GET with sortDirection DESC - http://localhost:8080/employees?sortDirection=DESC
 * * GET with sortColumn of firstName - http://localhost:8080/employees?sortColumn=firstName
 * * GET with custom likewise search for lastName (Tim%) - http://localhost:8080/employees?search=lastName:Tim
+
+### Spring Boot Actuator Exposes the following Management Endpoints: ###
+
+* Here are some of the basic ones:
+* * GET health checks for the service - http://localhost:8081/health
+* * GET environment configuration - http://localhost:8081/env
+* * The full list of management endpoints is here:  http://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html
+

@@ -16,10 +16,10 @@
 ### This application exposes the following REST endpoints: ###
 
 * *  GET - http://localhost:8080/employees
-* * POST - http://localhost:8080/employees
-* * PUT - http://localhost:8080/employees/id
 * * GET - http://localhost:8080/employees/id
-* * DELETE - http://localhost:8080/employees/id
+* * POST (only available to ADMIN users) - http://localhost:8080/employees
+* * PUT (only available to ADMIN users) - http://localhost:8080/employees/id
+* * DELETE (only available to ADMIN users) - http://localhost:8080/employees/id
 
 * The GET call that returns many employees has some additional query parameters (to support paging, sorting, and searching/filtering):
 

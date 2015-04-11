@@ -1,7 +1,7 @@
 # README #
 
-To run the application, type ./gradlew bootRun
-To run the tests, type ./gradlew clean check
+* To run the application, type ./gradlew bootRun
+* To run the tests, type ./gradlew clean check
 
 ### What is this repository for? ###
 

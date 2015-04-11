@@ -5,8 +5,13 @@
 
 ### What is this repository for? ###
 
-* This repository is a sample service for administering and viewing an Employee Directory, complete with authentication, an Administrator (HR) role, and a Basic (Employee) role.
+* This repository is a sample service for administering and viewing an Employee Directory, complete with authentication, an Admin(HR) role, and a Basic (Employee) role.
 * By default, the application runs on port 8080 and management port is 8081
+
+### Default users ###
+* The application comes with an Admin and Basic user (to show authentication/authorization features):
+* * ADMIN user credentials - username: admin@headspring.com password: password
+* * BASIC user credentials - username: user@headspring.com password: password
 
 ### This application exposes the following REST endpoints: ###
 
@@ -30,4 +35,3 @@
 * * GET health checks for the service - http://localhost:8081/health
 * * GET environment configuration - http://localhost:8081/env
 * * The full list of management endpoints is here:  http://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html
-

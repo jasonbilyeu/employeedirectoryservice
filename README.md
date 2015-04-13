@@ -1,5 +1,9 @@
 # README #
 
+### Prerequisites ###
+
+Install Java 7 jdk from here:  http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
+
 * To run the application, type ./gradlew bootRun
 * To run the tests, type ./gradlew clean check
 

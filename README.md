@@ -4,10 +4,8 @@
 
 Install Java 7 jdk from here:  http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
 
-### Running the Build and Tests ###
-* To run the tests, type ./gradlew clean check
-
-### Running the Application ###
+### Executing the Code ###
+* To build and run the tests, type ./gradlew clean check
 * To run the application, type ./gradlew bootRun
 
 ### What is this repository for? ###

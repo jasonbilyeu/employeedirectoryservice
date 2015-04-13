@@ -33,6 +33,7 @@ public class Employee {
 
     @Email
     @NotNull
+    @Column(unique=true, nullable=false)
     private String email;
 
     @ElementCollection(fetch = FetchType.EAGER)

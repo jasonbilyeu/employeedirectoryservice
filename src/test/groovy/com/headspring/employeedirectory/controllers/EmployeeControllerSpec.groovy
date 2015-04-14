@@ -9,10 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.IntegrationTest
 import org.springframework.boot.test.SpringApplicationContextLoader
+import org.springframework.http.HttpStatus
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.web.WebAppConfiguration
 import org.springframework.web.client.HttpClientErrorException
 import spock.lang.Specification
+import spock.lang.Unroll
 
 import static com.headspring.employeedirectory.ARandom.aRandom
 import static PageConstants.PAGE_NUMBER
@@ -23,6 +25,7 @@ import static PageConstants.SORT_DIRECTION
 import static com.headspring.employeedirectory.db.EmployeeType.HR
 import static com.headspring.employeedirectory.db.EmployeeType.REGULAR
 import static org.springframework.data.domain.Sort.Direction.DESC
+import static org.springframework.http.HttpStatus.BAD_REQUEST
 import static org.springframework.http.HttpStatus.FORBIDDEN
 import static org.springframework.http.HttpStatus.UNAUTHORIZED;
 
@@ -50,7 +53,7 @@ class EmployeeControllerSpec extends Specification {
         employeeRepository.deleteAll()
     }
 
-    def "should create employee when authenticated as HR employee" () {
+    def "should create employee when authenticated as HR employee"() {
         given:
         employeeClient = getEmployeeClientFor(HR)
 
@@ -63,7 +66,7 @@ class EmployeeControllerSpec extends Specification {
         storedEmployee.password == 'password'
     }
 
-    def "should update employee when authenticated as HR employee" () {
+    def "should update employee when authenticated as HR employee"() {
         given:
         employeeClient = getEmployeeClientFor(HR)
         Employee employee = employeeRepository.save(aRandom.employee().build())
@@ -73,7 +76,7 @@ class EmployeeControllerSpec extends Specification {
         employeeClient.update(employee) == employee
     }
 
-    def "should delete employee when authenticated as HR employee" () {
+    def "should delete employee when authenticated as HR employee"() {
         given:
         employeeClient = getEmployeeClientFor(HR)
         Employee employee = employeeRepository.save(aRandom.employee().build())
@@ -85,7 +88,7 @@ class EmployeeControllerSpec extends Specification {
         employeeRepository.findOne(employee.id) == null
     }
 
-    def "should get forbidden when attempting to create employee as REGULAR employee" () {
+    def "should get forbidden when attempting to create employee as REGULAR employee"() {
         given:
         employeeClient = getEmployeeClientFor(REGULAR)
 
@@ -97,7 +100,7 @@ class EmployeeControllerSpec extends Specification {
         ex.statusCode == FORBIDDEN
     }
 
-    def "should get forbidden when attempting to update employee as REGULAR employee" () {
+    def "should get forbidden when attempting to update employee as REGULAR employee"() {
         given:
         employeeClient = getEmployeeClientFor(REGULAR)
         Employee employee = employeeRepository.save(aRandom.employee().build())
@@ -111,7 +114,7 @@ class EmployeeControllerSpec extends Specification {
         ex.statusCode == FORBIDDEN
     }
 
-    def "should get forbidden when attempting to delete employee as REGULAR employee" () {
+    def "should get forbidden when attempting to delete employee as REGULAR employee"() {
         given:
         employeeClient = getEmployeeClientFor(REGULAR)
         Employee employee = employeeRepository.save(aRandom.employee().build())
@@ -124,7 +127,7 @@ class EmployeeControllerSpec extends Specification {
         ex.statusCode == FORBIDDEN
     }
 
-    def "should get unauthorized when attempting to create employee when not authenticated" () {
+    def "should get unauthorized when attempting to create employee when not authenticated"() {
         given:
         employeeClient = new EmployeeClient(hostname, port)
 
@@ -136,7 +139,7 @@ class EmployeeControllerSpec extends Specification {
         ex.statusCode == UNAUTHORIZED
     }
 
-    def "should get unauthorized when attempting to update employee when not authenticated" () {
+    def "should get unauthorized when attempting to update employee when not authenticated"() {
         given:
         employeeClient = new EmployeeClient(hostname, port)
 
@@ -148,7 +151,7 @@ class EmployeeControllerSpec extends Specification {
         ex.statusCode == UNAUTHORIZED
     }
 
-    def "should get unauthorized when attempting to delete employee when not authenticated" () {
+    def "should get unauthorized when attempting to delete employee when not authenticated"() {
         given:
         employeeClient = new EmployeeClient(hostname, port)
 
@@ -160,7 +163,7 @@ class EmployeeControllerSpec extends Specification {
         ex.statusCode == UNAUTHORIZED
     }
 
-    def "should find one employee" () {
+    def "should find one employee"() {
         given:
         Employee employee = employeeRepository.save(aRandom.employee().build())
 
@@ -168,7 +171,7 @@ class EmployeeControllerSpec extends Specification {
         employeeClient.findOne(employee.id) == employee
     }
 
-    def "should get unauthorized when attempting to find one employee when not authenticated" () {
+    def "should get unauthorized when attempting to find one employee when not authenticated"() {
         given:
         employeeClient = new EmployeeClient(hostname, port)
 
@@ -180,7 +183,29 @@ class EmployeeControllerSpec extends Specification {
         ex.statusCode == UNAUTHORIZED
     }
 
-    def "should find many employees" () {
+    @Unroll
+    def "should get bad request when attempting to create employee with #scenario"() {
+        given:
+        employeeClient = getEmployeeClientFor(HR)
+
+        when:
+        employeeClient.create(employee)
+
+        then:
+        def ex = thrown(HttpClientErrorException)
+        ex.statusCode == BAD_REQUEST
+
+        where:
+        scenario             | employee
+        'null firstName'     | aRandom.employee().firstName(null).build()
+        'null lastName'      | aRandom.employee().lastName(null).build()
+        'invalid email'      | aRandom.employee().email(aRandom.getRandomText(10)).build()
+        'null email'         | aRandom.employee().email(null).build()
+        'empty phoneNumbers' | aRandom.employee().phoneNumbers([]).build()
+        'null employeeType'  | aRandom.employee().employeeType(null).build()
+    }
+
+    def "should find many employees"() {
         given:
         Employee employee1 = employeeRepository.save(aRandom.employee().build())
         Employee employee2 = employeeRepository.save(aRandom.employee().build())
@@ -189,7 +214,7 @@ class EmployeeControllerSpec extends Specification {
         employeeClient.findMany().containsAll([employee1, employee2])
     }
 
-    def "should get unauthorized when attempting to find many employees when not authenticated" () {
+    def "should get unauthorized when attempting to find many employees when not authenticated"() {
         given:
         employeeClient = new EmployeeClient(hostname, port)
 
@@ -201,7 +226,7 @@ class EmployeeControllerSpec extends Specification {
         ex.statusCode == UNAUTHORIZED
     }
 
-    def "should find many employees specifying all paging and sorting params" () {
+    def "should find many employees specifying all paging and sorting params"() {
         given:
         Employee employee1 = employeeRepository.save(aRandom.employee().firstName("AAA").build())
         Employee employee2 = employeeRepository.save(aRandom.employee().firstName("AAB").build())
@@ -211,7 +236,7 @@ class EmployeeControllerSpec extends Specification {
         employeeClient.findMany([(PAGE_NUMBER): 2, (PAGE_SIZE): 1, (SORT_DIRECTION): DESC, (SORT_COLUMN): "firstName"]) == [employee1]
     }
 
-    def "should find many employees specifying a search parameter" () {
+    def "should find many employees specifying a search parameter"() {
         given:
         Employee employee1 = employeeRepository.save(aRandom.employee()
                 .firstName("Tabitha")

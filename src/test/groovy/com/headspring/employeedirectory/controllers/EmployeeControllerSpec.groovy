@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.boot.test.IntegrationTest
 import org.springframework.boot.test.SpringApplicationContextLoader
-import org.springframework.http.HttpStatus
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.web.WebAppConfiguration
 import org.springframework.web.client.HttpClientErrorException
@@ -43,11 +42,6 @@ class EmployeeControllerSpec extends Specification {
     EmployeeRepository employeeRepository
 
     EmployeeClient employeeClient
-
-    def setup() {
-        cleanup()
-        employeeClient = getEmployeeClientFor(REGULAR)
-    }
 
     def cleanup() {
         employeeRepository.deleteAll()
@@ -165,6 +159,7 @@ class EmployeeControllerSpec extends Specification {
 
     def "should find one employee"() {
         given:
+        employeeClient = getEmployeeClientFor(REGULAR)
         Employee employee = employeeRepository.save(aRandom.employee().build())
 
         expect:
@@ -207,6 +202,7 @@ class EmployeeControllerSpec extends Specification {
 
     def "should find many employees"() {
         given:
+        employeeClient = getEmployeeClientFor(REGULAR)
         Employee employee1 = employeeRepository.save(aRandom.employee().build())
         Employee employee2 = employeeRepository.save(aRandom.employee().build())
 
@@ -228,6 +224,7 @@ class EmployeeControllerSpec extends Specification {
 
     def "should find many employees specifying all paging and sorting params"() {
         given:
+        employeeClient = getEmployeeClientFor(REGULAR)
         Employee employee1 = employeeRepository.save(aRandom.employee().firstName("AAA").build())
         Employee employee2 = employeeRepository.save(aRandom.employee().firstName("AAB").build())
 
@@ -238,6 +235,7 @@ class EmployeeControllerSpec extends Specification {
 
     def "should find many employees specifying a search parameter"() {
         given:
+        employeeClient = getEmployeeClientFor(REGULAR)
         Employee employee1 = employeeRepository.save(aRandom.employee()
                 .firstName("Tabitha")
                 .employeeType(REGULAR)

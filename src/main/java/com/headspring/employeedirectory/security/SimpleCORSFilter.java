@@ -10,7 +10,7 @@ import java.io.IOException;
 @Component
 public class SimpleCORSFilter implements Filter {
 
-    @Value("${allowAccessControlOriginFrom}")
+    @Value("${allowAccessControlOriginFrom:null}")
     private String allowAccessControlOriginFrom;
 
     public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {

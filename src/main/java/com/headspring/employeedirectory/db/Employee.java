@@ -44,8 +44,8 @@ public class Employee {
     private EmployeeType employeeType;
 
     // This is temporary, because we are not using a real OAuth server
-    // (with Active Directory or other system for PWD management) so password is stored here
+    // (with Active Directory or other system for PWD management) so password is defaulted here
     // but not sent or received over the wire..
     @JsonIgnore
-    private String password;
+    private String password = "password";
 }

@@ -66,8 +66,13 @@ class EmployeeControllerSpec extends Specification {
         Employee employee = employeeRepository.save(aRandom.employee().build())
         employee.firstName = aRandom.firstName
 
-        expect:
-        employeeClient.update(employee) == employee
+        when:
+        Employee updatedEmployee = employeeClient.update(employee)
+        Employee storedEmployee = employeeRepository.findOne(updatedEmployee.id)
+
+        then:
+        updatedEmployee == employee
+        storedEmployee.password == 'password'
     }
 
     def "should delete employee when authenticated as HR employee"() {

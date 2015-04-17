@@ -26,9 +26,6 @@ public class EmployeeService {
     }
 
     public Employee insert(Employee employee) {
-        // This is temporary, because we are not using a real OAuth server
-        // (with Active Directory or other system for PWD management), set the password to 'password' on insert
-        employee.setPassword("password");
         return employeeRepository.save(employee);
     }
 

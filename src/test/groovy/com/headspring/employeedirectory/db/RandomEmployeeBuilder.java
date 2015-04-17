@@ -26,6 +26,6 @@ public class RandomEmployeeBuilder extends Employee.EmployeeBuilder {
             .email(String.format("%s.%s@headspring.com", firstName, lastName))
             .phoneNumbers(phoneNumbers)
             .employeeType(aRandom.getItem(EmployeeType.values()))
-            .password(aRandom.getRandomChars(10));
+            .password("password");
     }
 }

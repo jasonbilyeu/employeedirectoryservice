@@ -21,8 +21,8 @@ Install Java 7 jdk from here:  http://www.oracle.com/technetwork/java/javase/dow
 
 ### Default users ###
 * The application comes with an Admin and Basic user (to show authentication/authorization features):
-* * ADMIN user credentials - username: admin@headspring.com password: password
-* * BASIC user credentials - username: user@headspring.com password: password
+* * ADMIN user credentials - username: admin@blackbaud.com password: password
+* * BASIC user credentials - username: user@blackbaud.com password: password
 
 ### This application exposes the following REST endpoints: ###
 

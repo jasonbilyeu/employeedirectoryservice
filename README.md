@@ -2,7 +2,7 @@
 
 ### Prerequisites ###
 
-Install Java 7 jdk from here:  http://www.oracle.com/technetwork/java/javase/downloads/jdk7-downloads-1880260.html
+Install Java 8 jdk
 
 ### Executing the Code ###
 * To build and run the tests, type 

@@ -1,28 +1,27 @@
 buildscript {
     ext {
-        springBootVersion = '1.2.3.RELEASE'
+        springBootVersion = '1.5.4.RELEASE'
     }
     repositories {
         mavenCentral()
-        maven {
-            url "http://repo.spring.io/release"
-        }
     }
     dependencies {
-        classpath("org.springframework.boot:spring-boot-gradle-plugin:1.2.1.RELEASE")
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
     }
 }
 
 apply plugin: 'java'
-apply plugin: 'spring-boot'
 apply plugin: 'idea'
 apply plugin: 'groovy'
-
-sourceCompatibility = 1.7
+apply plugin: 'org.springframework.boot'
 
 repositories {
     mavenCentral()
 }
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+
 
 jar {
     baseName = 'employee-directory-service'
@@ -39,11 +38,12 @@ dependencies {
     runtime("com.h2database:h2")
     compile("org.projectlombok:lombok:1.14.8")
 
+    testCompile("org.codehaus.groovy:groovy-all:2.4.6")
     testCompile("org.springframework.boot:spring-boot-starter-test:${springBootVersion}")
     // mandatory dependencies for using Spock
     //testCompile "org.codehaus.groovy:groovy-all:2.4.1"
-    testCompile "org.spockframework:spock-core:0.7-groovy-2.0"
-    testCompile 'org.spockframework:spock-spring:0.7-groovy-2.0'
+    testCompile "org.spockframework:spock-core:1.0-groovy-2.4"
+    testCompile 'org.spockframework:spock-spring:1.0-groovy-2.4'
     testCompile 'org.fluttercode.datafactory:datafactory:0.8'
 
     // optional dependencies for using Spock

@@ -14,5 +14,6 @@ node {
   sh "./gradlew clean build"
 
   stage 'Stage Archive'
+  junit 'build/test-results/**/*.xml'
   archiveArtifacts artifacts: 'build/reports/**/*,build/test-results/**/*'
 }

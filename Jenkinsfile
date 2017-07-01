@@ -14,5 +14,5 @@ node {
   sh "./gradlew clean build"
 
   stage 'Stage Archive'
-  junit allowEmptyResults: true, testResults: '**/build/test-reports/*.xml'
+  archiveArtifacts artifacts: 'build/reports/**/*,build/test-results/**/*'
 }

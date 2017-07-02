@@ -16,4 +16,5 @@ node {
   stage 'Stage Archive'
   junit 'build/test-results/**/*.xml'
   archiveArtifacts artifacts: 'build/reports/**/*,build/test-results/**/*'
+  step( [ $class: 'JacocoPublisher' ] )
 }
